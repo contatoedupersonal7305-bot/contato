@@ -59,6 +59,24 @@ def buscar_contato():
         for contato in contatos:
             print(f"{contato[0]:<5} | {contato[1]:<20} | {contato[2]:<15} | {contato[3]:<30}")
 
+def buscar_contato_por_id():
+    id_contato = input("Digite o ID do contato que deseja buscar: ")
+    conexao = conexao_banco()
+    cursor = conexao.cursor()
+    sql = 'SELECT * FROM contatos WHERE id = ?'
+    cursor.execute(sql, (id_contato,))
+    contato = cursor.fetchone()
+    conexao.close()
+
+    if contato:
+        print("### Contato encontrado ###")
+        print(f"ID: {contato[0]}")
+        print(f"Nome: {contato[1]}")
+        print(f"Telefone: {contato[2]}")
+        print(f"Email: {contato[3]}")
+    else:
+        print("Contato não encontrado.")
+
 def atualizar_contato():
     id_contato = input("Digite o ID do contato que deseja atualizar: ")
     conexao = conexao_banco()
@@ -102,8 +120,9 @@ def menu():
         print("1. Adicionar contato")
         print("2. Listar contatos")
         print("3. Buscar contato por nome")
-        print("4. Atualizar contato")
-        print("5. Excluir contato")
+        print("4. Buscar contato por ID")
+        print("5. Atualizar contato")
+        print("6. Excluir contato")
         print("0. Sair")
 
         opcao = input("Escolha uma opção: ")
@@ -118,8 +137,10 @@ def menu():
         elif opcao == "3":
             buscar_contato()
         elif opcao == "4":
-            atualizar_contato()
+            buscar_contato_por_id()
         elif opcao == "5":
+            atualizar_contato()
+        elif opcao == "6":
             excluir_contato()
         elif opcao == "0":
             print("Saindo do programa...")
